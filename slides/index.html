@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>How Do I Even Swarm?</title>
+
+    <meta name="description" content="An ever evolving presentation on how to use Docker Swarm">
+    <meta name="author" content="Everett Toews">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="reveal">
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+        <section id="welcome">
+          <div>
+            <div style="float: right;">
+              <img src="img/swarmnado.gif">
+              <p style="font-size: 50%;">Image source: Docker Inc.</p>
+            </div>
+            <h1>How Do I<br/>Even Swarm?</h1>
+          </div>
+          <p style="font-size: 50%;">Use the ◀︎ ▶︎ keys to navigate</p>
+        </section>
+
+        <section id="instructors">
+          <center>
+            <table>
+              <tbody>
+                <tr>
+                  <td>Everett Toews</td>
+                  <td><a href="https://twitter.com/everett_toews" target="_blank">@everett_toews</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </center>
+        </section>
+
+        <section id="goals">
+          <h3>Goals</h3>
+          <ul>
+            <li>Get started with Docker Swarm</li>
+            <li>Use Swarm effectively</li>
+          </ul>
+        </section>
+
+        <section>
+          <span style="white-space: nowrap;">
+            <h3>Agenda</h3>
+            <ol>
+              <li><a href="#/swarm">Swarm</a></li>
+              <li><a href="#/carina">Carina</a></li>
+              <li><a href="#/getting-started">Getting Started on Swarm</a></li>
+              <li><a href="#/effective-swarm">Effective Swarm</a></li>
+              <li><a href="#/images">Images</a></li>
+              <li><a href="#/data">Data</a></li>
+              <li><a href="#/networks">Networks</a></li>
+              <li><a href="#/security">Security</a></li>
+              <li><a href="#/service-discovery">Service Discovery</a></li>
+              <li><a href="#/wrap-up">Wrap Up</a></li>
+            </ol>
+          </span>
+        </section>
+
+<!-- ********************************************************************** -->
+
+        <section id="swarm">
+          <h1 style="color:DeepSkyBlue">Swarm</h1>
+        </section>
+
+        <section>
+          <h3>Comparison</h3>
+          <table>
+            <tr>
+              <td><img src="img/what-is-docker-diagram.png" width="400" height="auto"></td>
+              <td><img src="img/what-is-vm-diagram.png" width="400" height="auto"></td>
+            </tr>
+            <tr>
+              <td style="text-align:center">VMs</td>
+              <td style="text-align:center">Containers</td>
+            </tr>
+          </table>
+        </section>
+
+        <section>
+          <h3>Benefits</h3>
+          <ul>
+            <li>Better resource utilization</li>
+            <li>Application packaging (Docker images)</li>
+            <li>Process isolation</li>
+            <li>Immutable infrastructure</li>
+            <li>Multi-Cloud</li>
+            <li>🐶🐱🐹 vs 🐮🐮🐮</li>
+            <li><b>Composable</b></li>
+            <li><b>Reproducible environments</b></li>
+          </ul>
+          <aside class="notes">
+            <ul>
+              <li>Previously we did this with VMs.</li>
+              <li>The student with the lovely MOTD.</li>
+              <li>The students who got owned and had 3.4 TB outgoing bandwidth and $700 of charges.</li>
+              <li>The students who lost everything when their VM died.</li>
+              <li>There's Just No Getting around It: You're Building a Distributed System</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section>
+          <h3>Docker Swarm</h3>
+          <img src="img/docker-swarm.png"/>
+          <aside class="notes">
+            <ul>
+              <li>Many hosts, one API endpoint</li>
+            </ul>
+          </aside>
+        </section>
+
+<!-- ********************************************************************** -->
+
+        <section id="carina">
+          <h1 style="color:DeepSkyBlue">Carina</h1>
+        </section>
+
+        <section>
+          <h3>Push Button, Receive Swarm</h3>
+          <img src="img/push-button-receive-bacon.jpg"/>
+        </section>
+
+        <section>
+          <h3>Carina</h3>
+          <img src="img/carina-topology.png"/>
+          <aside class="notes">
+            <ul>
+              <li>Treat a cluster of dockers as 1 docker</li>
+              <li>Same docker API, same docker commands</li>
+              <li>Scheduling = pick which host on which to run commands</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section>
+          <h3>Carina Constraints</h3>
+          <ul>
+            <li>Cannot do volume mounts</li>
+            <ul>
+              <li>Except for <code>--volume /var/run/docker.sock:/var/run/docker.sock</code></li>
+              <li><a href="https://getcarina.com/docs/tutorials/data-volume-containers/" target="_blank">Use data volume containers</a> instead</li>
+            </ul>
+            <li>Cannot use <code>--privileged</code>, <code>--cap-add</code>, or <code>--cap-drop</code></li>
+            <li>AppArmor restrictions</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Think above the whale</h3>
+          <img src="img/docker-swarm.png"/>
+        </section>
+
+<!-- ********************************************************************** -->
+
+        <section id="getting-started">
+          <h1 style="color:DeepSkyBlue">Getting started</h1>
+          <h1 style="color:DeepSkyBlue">on Carina</h1>
+        </section>
+
+        <section>
+          <h3>Tutorial</h3>
+          <p><a href="https://getcarina.com/docs/getting-started/getting-started-on-carina/" target="_blank">Getting started on Carina</a></p>
+        </section>
+
+<!-- ********************************************************************** -->
+
+        <section id="images">
+          <h1 style="color:DeepSkyBlue">Images</h1>
+        </section>
+
+        <section>
+          <h3>Foo</h3>
+          <p>Bar</p>
+        </section>
+
+<!-- ********************************************************************** -->
+
+        <section id="data">
+          <h1 style="color:DeepSkyBlue">Data</h1>
+          <aside class="notes">
+            <ul>
+              <li>It's the first semester doing this so there's bound to be some bumps in the road</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section>
+          <h3>Start by helping yourself</h3>
+          <h3>Repeat after me 3 times</h3>
+        </section>
+
+        <section>
+          <h3>The cloud will eat my homework</h3>
+        </section>
+
+        <section id="backup">
+          <h3>Backup backup backup</h3>
+          <p><a href="https://getcarina.com/docs/tutorials/backup-restore-data/" target="_blank">Back up and restore container data</a></p>
+        </section>
+
+<!-- ********************************************************************** -->
+
+        <section id="networks">
+          <h1 style="color:DeepSkyBlue">Networks</h1>
+        </section>
+
+        <section>
+          <h3>Foo</h3>
+          <h3>Bar</h3>
+        </section>
+
+        <section>
+          <h3>Create</h3>
+          <pre><code class="bash" data-trim data-noescape>
+$ docker network create mynetwork
+
+          </code></pre>
+          <p>Blah blah blah</p>
+        </section>
+
+<!-- ********************************************************************** -->
+
+        <section id="security">
+          <h1 style="color:DeepSkyBlue">Security</h1>
+        </section>
+
+        <section>
+          <h3>Networks</h3>
+        </section>
+
+<!-- ********************************************************************** -->
+
+        <section id="service-discovery">
+          <h1 style="color:DeepSkyBlue">Service Discovery</h1>
+        </section>
+
+        <section>
+          <h3>Foo</h3>
+          <h3>Bar</h3>
+        </section>
+
+<!-- ********************************************************************** -->
+
+        <section id="wrap-up">
+          <h1 style="color:DeepSkyBlue">Wrap up</h1>
+        </section>
+
+        <section id="thanks">
+          <h1>Thanks!</h1>
+          <p><a href="https://twitter.com/everett_toews" target="_blank">@everett_toews</a></p>
+          <p><a href="http://rack.to/carina-tutorial">rack.to/carina-tutorial</a></p>
+        </section>
+
+<!-- ********************************************************************** -->
+
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: false,
+        slideNumber: false,
+        progress: false,
+        history: true,
+        center: true,
+
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true },
+          { src: 'plugin/notes/notes.js', async: true }
+        ]
+      });
+
+    </script>
+
+  </body>
+</html>
