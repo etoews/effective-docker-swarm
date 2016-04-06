@@ -231,7 +231,7 @@ mysql</span>
           <h1 style="color:DeepSkyBlue">Continued</h1>
         </section>
 
-        <section>
+        <section id="carina-architecture">
           <img src="img/docker-swarm-carina.jpg"/>
         </section>
 
@@ -243,10 +243,11 @@ mysql</span>
             <ul>
               <li>Example <code>--volume /some/host/path:/some/container/path</code></li>
               <li>Except for <code>--volume /var/run/docker.sock:/var/run/docker.sock</code></li>
-              <li>See Data section ... TODO</li>
+              <li>See <a href="#/data">Data section</a></li>
             </ul>
             <li>Cannot use <code>--privileged</code>, <code>--cap-add</code>, or <code>--cap-drop</code></li>
             <li>AppArmor restrictions</li>
+            <li>Try not to <code>docker rm</code> the Carina containers</li>
           </ul>
         </section>
 
@@ -526,6 +527,15 @@ MySQL Connection Error: (2002) php_network_getaddresses: getaddrinfo failed: Nam
         </section>
 
         <section>
+          <div>
+            <h3>x node cluster</h3>
+            <ul>
+              <li>consul/etcd == x containers</li>
+              <li>registrator == x containers</li>
+              <li>consul-template/confd == sidecar process per load balancer</li>
+              <li>nginx/haproxy == container per service</li>
+            </ul>
+          </div>
           <img src="img/thinking-face.png"/>
         </section>
 
@@ -535,6 +545,15 @@ MySQL Connection Error: (2002) php_network_getaddresses: getaddrinfo failed: Nam
             <li>interlock == service registry bridge + config writer + reloader</li>
             <li>nginx/haproxy == load balancer</li>
           </ul>
+          <h3>x node cluster</h3>
+          <ul>
+            <li>interlock == container per service</li>
+            <li>nginx/haproxy == container per service</li>
+          </ul>
+        </section>
+
+        <section>
+          <img src="img/interlock.jpg"/>
         </section>
 
         <section>
@@ -552,6 +571,24 @@ MySQL Connection Error: (2002) php_network_getaddresses: getaddrinfo failed: Nam
         <section id="use-cases">
           <h1 style="color:DeepSkyBlue">Use Cases</h1>
         </section>
+
+        <section>
+          <h3>ChatOps</h3>
+          <img src="img/lloyd-idea.gif"/>
+          <p><a href="https://getcarina.com/blog/moving-chatops-into-carina/" target="_blank">Moving ChatOps Into Carina</a></p>
+        </section>
+
+        <section>
+          <h3>Docs</h3>
+          <img src="img/deconst.jpg"/>
+        </section>
+
+        <section>
+          <h3>Teaching</h3>
+          <img src="img/howtowhale.png"/>
+          <p><a href="https://howtowhale.com/" target="_blank">How to Whale</a></p>
+        </section>
+
 
 <!-- ********************************************************************** -->
 
