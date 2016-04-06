@@ -16,6 +16,7 @@
 
     <link rel="stylesheet" href="css/reveal.css">
     <link rel="stylesheet" href="css/theme/night.css" id="theme">
+    <link rel="stylesheet" href="css/custom.css">
 
     <!-- Code syntax highlighting -->
     <link rel="stylesheet" href="lib/css/zenburn.css">
@@ -42,12 +43,12 @@
         <section id="welcome">
           <div>
             <div style="float: right;">
-              <img src="img/swarmnado.gif">
+              <img src="img/swarmnado.gif"/>
               <p style="font-size: 50%;">Image source: Docker Inc.</p>
             </div>
             <h1>How Do I<br/>Even Swarm?</h1>
           </div>
-          <p style="font-size: 50%;">Use the ◀︎ ▶︎ keys to navigate</p>
+          <p style="font-size: 25%;">Use the arrow keys to navigate</p>
         </section>
 
         <section id="instructors">
@@ -78,12 +79,14 @@
               <li><a href="#/swarm">Swarm</a></li>
               <li><a href="#/carina">Carina</a></li>
               <li><a href="#/getting-started">Getting Started on Swarm</a></li>
+              <li><a href="#/carina-continued">Carina Continued</a></li>
               <li><a href="#/effective-swarm">Effective Swarm</a></li>
               <li><a href="#/images">Images</a></li>
               <li><a href="#/data">Data</a></li>
               <li><a href="#/networks">Networks</a></li>
               <li><a href="#/security">Security</a></li>
               <li><a href="#/service-discovery">Service Discovery</a></li>
+              <li><a href="#/use-cases">Use Cases</a></li>
               <li><a href="#/wrap-up">Wrap Up</a></li>
             </ol>
           </span>
@@ -99,12 +102,12 @@
           <h3>Comparison</h3>
           <table>
             <tr>
-              <td><img src="img/what-is-docker-diagram.png" width="400" height="auto"></td>
-              <td><img src="img/what-is-vm-diagram.png" width="400" height="auto"></td>
+              <td><img src="img/docker-nodes.jpg" width="400" height="auto"></td>
+              <td><img src="img/docker-swarm.jpg" width="400" height="auto"></td>
             </tr>
             <tr>
-              <td style="text-align:center">VMs</td>
-              <td style="text-align:center">Containers</td>
+              <td style="text-align:center">Nodes</td>
+              <td style="text-align:center">Swarm</td>
             </tr>
           </table>
         </section>
@@ -112,34 +115,17 @@
         <section>
           <h3>Benefits</h3>
           <ul>
-            <li>Better resource utilization</li>
-            <li>Application packaging (Docker images)</li>
-            <li>Process isolation</li>
-            <li>Immutable infrastructure</li>
-            <li>Multi-Cloud</li>
+            <li>Docker API</li>
+            <li>Ecosystem tooling</li>
+            <li>Scheduling containers</li>
+              <ul>
+                <li>Strategies</li>
+                <li>Constraints</li>
+                <li>Filters</li>
+              </ul>
+            <li>Rescheduling containers when hosts fail (experimental)</li>
             <li>🐶🐱🐹 vs 🐮🐮🐮</li>
-            <li><b>Composable</b></li>
-            <li><b>Reproducible environments</b></li>
           </ul>
-          <aside class="notes">
-            <ul>
-              <li>Previously we did this with VMs.</li>
-              <li>The student with the lovely MOTD.</li>
-              <li>The students who got owned and had 3.4 TB outgoing bandwidth and $700 of charges.</li>
-              <li>The students who lost everything when their VM died.</li>
-              <li>There's Just No Getting around It: You're Building a Distributed System</li>
-            </ul>
-          </aside>
-        </section>
-
-        <section>
-          <h3>Docker Swarm</h3>
-          <img src="img/docker-swarm.png"/>
-          <aside class="notes">
-            <ul>
-              <li>Many hosts, one API endpoint</li>
-            </ul>
-          </aside>
         </section>
 
 <!-- ********************************************************************** -->
@@ -153,25 +139,111 @@
           <img src="img/push-button-receive-bacon.jpg"/>
         </section>
 
-        <section>
-          <h3>Carina</h3>
-          <img src="img/carina-topology.png"/>
-          <aside class="notes">
-            <ul>
-              <li>Treat a cluster of dockers as 1 docker</li>
-              <li>Same docker API, same docker commands</li>
-              <li>Scheduling = pick which host on which to run commands</li>
-            </ul>
-          </aside>
+<!-- ********************************************************************** -->
+
+        <section id="getting-started">
+          <h1 style="color:DeepSkyBlue">Getting started</h1>
+          <h1 style="color:DeepSkyBlue">on Swarm</h1>
         </section>
 
         <section>
-          <h3>Carina Constraints</h3>
+          <h3>Get a Swarm</h3>
           <ul>
-            <li>Cannot do volume mounts</li>
+            <li><a href="https://getcarina.com/docs/getting-started/getting-started-on-carina/" target="_blank">Getting started with the Carina GUI</a></li>
+            <li><a href="https://getcarina.com/docs/getting-started/getting-started-carina-cli/" target="_blank">Getting started with the Carina CLI</a></li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Create Cluster</h3>
+
+          <pre><code class="bash" data-trim data-noescape>
+$ carina create --wait --nodes=3 mycluster
+<span class="fragment">ClusterName         Flavor              Nodes               AutoScale           Status
+mycluster           container1-4G       3                   false               active</span>
+
+<span class="fragment">$ carina env mycluster</span>
+<span class="fragment">source /Users/everett/.carina/clusters/everett4drg/mycluster/docker.env
+# Run the command below to get your Docker environment variables set:
+# eval $(carina env mycluster)</span>
+
+<span class="fragment">$ eval $(carina env mycluster)</span>
+
+<span class="fragment">$ env | grep DOCKER</span>
+<span class="fragment">DOCKER_HOST=tcp://104.130.0.154:2376
+DOCKER_TLS_VERIFY=1
+DOCKER_CERT_PATH=/Users/everett/.carina/clusters/everett4drg/mycluster
+DOCKER_VERSION=1.10.3</span>
+
+<span class="fragment">$ carina --help</span>
+<span class="fragment">usage: carina [&lt;flags&gt;] &lt;command&gt; [&lt;args&gt; ...]
+
+command line interface to launch and work with Docker Swarm clusters</span>
+          </code></pre>
+        </section>
+
+        <section>
+          <h3>Create WordPress</h3>
+
+          <pre><code class="bash" data-trim data-noescape>
+$ docker network create mynetwork
+<span class="fragment">4b4d8304756d309843349c2f09d3bea799330eba6ca242cac819d319dc17ee8f</span>
+
+<span class="fragment">$ docker run --detach \
+  --name mysql \
+  --net mynetwork \
+  --env MYSQL_ROOT_PASSWORD=my-root-pw \
+  mysql:5.6</span>
+<span class="fragment">ec8e539ce755a81aaadf2cc04c1ca62075f1da324382ef27454ab27220a42235</span>
+
+<span class="fragment">$ docker run --detach \
+  --name wordpress \
+  --net mynetwork \
+  --publish 80:80 \
+  --env WORDPRESS_DB_HOST=mysql \
+  --env WORDPRESS_DB_PASSWORD=my-root-pw \
+  wordpress:4.4</span>
+<span class="fragment">f39797148323746feffd722a9d5b5d62aa1ba67b3d61e33391365883f8bea84a</span>
+          </code></pre>
+        </section>
+
+        <section>
+          <h3>Start that blog</h3>
+
+          <pre><code class="bash" data-trim data-noescape>
+$ docker ps -n=2
+<span class="fragment">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                      NAMES
+f39797148323        wordpress:4.4       "/entrypoint.sh apach"   41 seconds ago      Up 39 seconds       172.99.79.254:80->80/tcp   0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n3/wordpress
+ec8e539ce755        mysql:5.6           "docker-entrypoint.sh"   2 minutes ago       Up 2 minutes        3306/tcp                   0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n2/mysql</span>
+
+<span class="fragment">$ open http://$(docker port wordpress 80)</span>
+
+<span class="fragment">$ docker rm --force --volumes wordpress mysql</span>
+<span class="fragment">wordpress
+mysql</span>
+          </code></pre>
+        </section>
+
+<!-- ********************************************************************** -->
+
+        <section id="carina-continued">
+          <h1 style="color:DeepSkyBlue">Carina</h1>
+          <h1 style="color:DeepSkyBlue">Continued</h1>
+        </section>
+
+        <section>
+          <img src="img/docker-swarm-carina.jpg"/>
+        </section>
+
+        <section>
+          <h3>Constraints</h3>
+          <p>tl;dr You don't have access to the Docker Host</p>
+          <ul>
+            <li>Cannot use volume mounts</li>
             <ul>
+              <li>Example <code>--volume /some/host/path:/some/container/path</code></li>
               <li>Except for <code>--volume /var/run/docker.sock:/var/run/docker.sock</code></li>
-              <li><a href="https://getcarina.com/docs/tutorials/data-volume-containers/" target="_blank">Use data volume containers</a> instead</li>
+              <li>See Data section ... TODO</li>
             </ul>
             <li>Cannot use <code>--privileged</code>, <code>--cap-add</code>, or <code>--cap-drop</code></li>
             <li>AppArmor restrictions</li>
@@ -179,20 +251,40 @@
         </section>
 
         <section>
-          <h3>Think above the whale</h3>
-          <img src="img/docker-swarm.png"/>
+          <h3>Get info</h3>
+
+          <pre><code class="bash" data-trim data-noescape>
+$ docker info
+<span class="fragment">Containers: 13
+ Running: 7
+ Paused: 0
+ Stopped: 6
+Images: 11
+Server Version: swarm/1.1.3
+Role: primary
+Strategy: spread
+Filters: health, port, dependency, affinity, constraint
+Nodes: 3
+...</span>
+
+<span class="fragment">$ docker ps --all</span>
+<span class="fragment">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+90053babe266        swarm:1.1.3         "/swarm manage -H=tcp"   44 minutes ago      Up 44 minutes                           0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n1/swarm-manager
+b55984655563        cirros              "/sbin/init"             44 minutes ago                                              0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n3/swarm-data
+c4f69d0607da        carina/consul       "/bin/consul agent -b"   43 minutes ago      Up 43 minutes                           0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n3/carina-svcd
+301b6682c25c        cirros              "/sbin/init"             43 minutes ago                                              0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n3/carina-svcd-data
+...</span>
+          </code></pre>
         </section>
 
 <!-- ********************************************************************** -->
 
-        <section id="getting-started">
-          <h1 style="color:DeepSkyBlue">Getting started</h1>
-          <h1 style="color:DeepSkyBlue">on Carina</h1>
+        <section id="effective-swarm">
+          <h1 style="color:DeepSkyBlue">Effective Swarm</h1>
         </section>
 
         <section>
-          <h3>Tutorial</h3>
-          <p><a href="https://getcarina.com/docs/getting-started/getting-started-on-carina/" target="_blank">Getting started on Carina</a></p>
+          <img src="img/bat-swarm.jpg"/>
         </section>
 
 <!-- ********************************************************************** -->
@@ -202,33 +294,130 @@
         </section>
 
         <section>
-          <h3>Foo</h3>
-          <p>Bar</p>
+          <h3>Pull an image and run a container</h3>
+
+          <pre><code class="bash" data-trim data-noescape>
+$ docker pull nginx:1.9
+<span class="fragment">0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n3: Pulling nginx:1.9... : downloaded
+0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n2: Pulling nginx:1.9... : downloaded
+0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n1: Pulling nginx:1.9... : downloaded</span>
+
+<span class="fragment">$ docker run --detach --publish 80:80 nginx:1.9</span>
+<span class="fragment">aafec487eced007c94d57b731a713821adb149a99e8e724be599afb02a9dd12d</span>
+
+<span class="fragment">$ docker run --detach --publish 80:80 nginx:1.9</span>
+<span class="fragment">2286b3b6ff70cc1c7e5c186224a4ec4c6f98a4d4b841c22537dad3d89638384e</span>
+
+<span class="fragment">$ docker run --detach --publish 80:80 nginx:1.9</span>
+<span class="fragment">bf93e25fade39b5df66012fc1d06976ab6c05e67a6662a1c5454e820698fff58</span>
+
+<span class="fragment">$ docker rm -fv $(docker ps -q -n=3)</span>
+          </code></pre>
+          <span class="fragment"><img src="img/thumbs-up.png"/></span>
+        </section>
+
+        <section>
+          <h3>Build a custom image</h3>
+
+          <pre><code class="bash" data-trim data-noescape>
+$ mkdir my-nginx
+<span class="fragment">$ cd my-nginx/</span>
+
+<span class="fragment">$ wget -q https://raw.githubusercontent.com/nginxinc/docker-nginx/master/mainline/jessie/Dockerfile</span>
+
+<span class="fragment">$ docker build --tag my-nginx .</span>
+<span class="fragment">Sending build context to Docker daemon  2.56 kB
+Step 1 : FROM debian:jessie
+jessie: Pulling from library/debian
+...</span>
+          </code></pre>
+        </section>
+
+        <section>
+          <h3>Run a container</h3>
+
+          <pre><code class="bash" data-trim data-noescape>
+$ docker run --detach --publish 80:80 my-nginx
+<span class="fragment">b7ef97d0e7b0fc031096613fbbe7925c96c45929c52aa74add1ef6a9f2c0636c</span>
+
+<span class="fragment">$ docker ps --latest</span>
+<span class="fragment">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                               NAMES
+b7ef97d0e7b0        my-nginx            "nginx -g 'daemon off"   21 seconds ago      Up 20 seconds       104.130.0.207:80->80/tcp, 443/tcp   0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n2/serene_pike</span>
+
+<span class="fragment">$ docker run --detach --publish 80:80 my-nginx</span>
+<span class="fragment">docker: Error response from daemon: unable to find a node that satisfies image==my-nginx.
+See 'docker run --help'.</span>
+          </code></pre>
+          <span class="fragment"><img src="img/thinking-face.png"/></span>
+        </section>
+
+        <section>
+          <h3>Solution</h3>
+          <p><a href="https://getcarina.com/docs/troubleshooting/run-container-using-custom-image/" target="_blank">Error running a container using a custom image</a></p>
         </section>
 
 <!-- ********************************************************************** -->
 
         <section id="data">
           <h1 style="color:DeepSkyBlue">Data</h1>
-          <aside class="notes">
-            <ul>
-              <li>It's the first semester doing this so there's bound to be some bumps in the road</li>
-            </ul>
-          </aside>
         </section>
 
         <section>
-          <h3>Start by helping yourself</h3>
-          <h3>Repeat after me 3 times</h3>
+          <h3>Create a volume and write some data</h3>
+
+          <pre><code class="bash" data-trim data-noescape>
+$ docker volume create --name mydata
+<span class="fragment">mydata</span>
+
+<span class="fragment">$ docker volume ls</span>
+<span class="fragment">DRIVER              VOLUME NAME
+local               0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n1/mydata
+local               0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n2/mydata
+local               0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n3/mydata</span>
+
+<span class="fragment">$ docker run --rm \
+  --volume mydata:/test \
+  debian:jessie \
+  /bin/bash -c "echo 'hello' > /test/world.txt"</span>
+          </code></pre>
+          <span class="fragment"><img src="img/thumbs-up.png"/></span>
         </section>
 
         <section>
-          <h3>The cloud will eat my homework</h3>
+          <h3>Read some data</h3>
+
+          <pre><code class="bash" data-trim data-noescape>
+$ docker run --rm \
+  --volume mydata:/test \
+  debian:jessie \
+  cat /test/world.txt
+<span class="fragment">hello</span>
+
+<span class="fragment">$ docker run --rm \
+  --volume mydata:/test \
+  debian:jessie \
+  cat /test/world.txt</span>
+<span class="fragment">hello</span>
+
+<span class="fragment">$ docker run --rm \
+  --volume mydata:/test \
+  debian:jessie \
+  cat /test/world.txt</span>
+<span class="fragment">cat: /test/world.txt: No such file or directory</span>
+          </code></pre>
+          <span class="fragment"><img src="img/thinking-face.png"/></span>
         </section>
 
-        <section id="backup">
-          <h3>Backup backup backup</h3>
-          <p><a href="https://getcarina.com/docs/tutorials/backup-restore-data/" target="_blank">Back up and restore container data</a></p>
+        <section>
+          <h3>Solutions</h3>
+          <ul>
+            <li><a href="https://getcarina.com/docs/tutorials/data-volume-containers/" target="_blank">Use data volume containers</a></li>
+            <li><a href="https://getcarina.com/docs/tutorials/backup-restore-data/" target="_blank">Back up and restore container data</a></li>
+            <li><a href="https://getcarina.com/docs/tutorials/data-stores-mysql/" target="_blank">Use MySQL on Carina</a></li>
+            <li><a href="https://getcarina.com/docs/tutorials/data-stores-mysql-prod/" target="_blank">Connect a Carina container to a Rackspace cloud database</a></li>
+            <li>Distributed file system</li>
+            <li><a href="https://github.com/docker/swarm/issues/1529" target="_blank">The utility of creating a volume per node</a> (bug report)</li>
+          </ul>
         </section>
 
 <!-- ********************************************************************** -->
@@ -238,17 +427,59 @@
         </section>
 
         <section>
-          <h3>Foo</h3>
-          <h3>Bar</h3>
+          <h3>Run Redis and write/read some data</h3>
+
+          <pre><code class="bash" data-trim data-noescape>
+$ docker run --detach --name redis --publish 6379:6379 redis:3.0
+<span class="fragment">29d630e377ff385197916e3a48e7a73d9afe0f736f02cc09c86ce51a9ff47f74</span>
+
+<span class="fragment">$ docker port redis 6379</span>
+<span class="fragment">104.130.0.207:6379</span>
+
+<span class="fragment">$ redis-cli -h 104.130.0.207 set redis:on:carina true</span>
+<span class="fragment">OK</span>
+
+<span class="fragment">$ redis-cli -h 104.130.0.207 get redis:on:carina</span>
+<span class="fragment">"true"</span>
+          </code></pre>
+          <span class="fragment"><img src="img/thumbs-up.png"/></span>
+          <span class="fragment"><img src="img/thinking-face.png"/></span>
         </section>
 
         <section>
-          <h3>Create</h3>
-          <pre><code class="bash" data-trim data-noescape>
-$ docker network create mynetwork
+          <h3>Create WordPress</h3>
 
+          <pre><code class="bash" data-trim data-noescape>
+$ docker run --detach \
+  --name mysql \
+  --env MYSQL_ROOT_PASSWORD=my-root-pw \
+  mysql:5.6
+<span class="fragment">97ec05a2efce210b438f73e01db527065d5b852b320a2a6835c2731416e03c52</span>
+
+<span class="fragment">$ docker run --detach \
+  --name wordpress \
+  --publish 80:80 \
+  --env WORDPRESS_DB_HOST=mysql \
+  --env WORDPRESS_DB_PASSWORD=my-root-pw \
+  wordpress:4.4</span>
+<span class="fragment">4d278d9069ff7d23218d5bdc33b14601819cad937ebf0c3308b095059f975441</span>
+
+<span class="fragment">$ docker logs wordpress</span>
+<span class="fragment">WordPress not found in /var/www/html - copying now...
+Complete! WordPress has been successfully copied to /var/www/html
+Warning: mysqli::mysqli(): php_network_getaddresses: getaddrinfo failed: Name or service not known in - on line 10
+Warning: mysqli::mysqli(): (HY000/2002): php_network_getaddresses: getaddrinfo failed: Name or service not known in - on line 10
+MySQL Connection Error: (2002) php_network_getaddresses: getaddrinfo failed: Name or service not known</span>
           </code></pre>
-          <p>Blah blah blah</p>
+          <span class="fragment"><img src="img/thinking-face.png"/></span>
+        </section>
+
+        <section>
+          <h3>Solutions</h3>
+          <ul>
+            <li><a href="https://getcarina.com/docs/tutorials/overlay-networks/" target="_blank">Use overlay networks in Carina</a></li>
+            <li><a href="https://getcarina.com/docs/tutorials/servicenet/" target="_blank">Communicate between containers over the ServiceNet internal network</a> (informational)</li>
+          </ul>
         </section>
 
 <!-- ********************************************************************** -->
@@ -258,7 +489,14 @@ $ docker network create mynetwork
         </section>
 
         <section>
-          <h3>Networks</h3>
+          <h3>Solutions</h3>
+          <ul>
+            <li><a href="https://getcarina.com/docs/tutorials/overlay-networks/" target="_blank">Use overlay networks in Carina</a></li>
+            <li><a href="https://getcarina.com/docs/tutorials/patching-security-vulnerabilities/" target="_blank">Patch security vulnerabilities with watchtower</a></li>
+            <li><a href="https://getcarina.com/docs/tutorials/nginx-with-lets-encrypt/" target="_blank">NGINX with Let's Encrypt</a></li>
+            <li><a href="https://github.com/getcarina/getcarina.com/pull/800" target="_blank">[WIP] PKI tutorial</a> (pull request)</li>
+            <li><a href="https://github.com/getcarina/feedback/issues/56" target="_blank">Enable 'security side car'</a> (issue)</li>
+          </ul>
         </section>
 
 <!-- ********************************************************************** -->
@@ -268,8 +506,51 @@ $ docker network create mynetwork
         </section>
 
         <section>
-          <h3>Foo</h3>
-          <h3>Bar</h3>
+          <h3>Stack 1</h3>
+          <ul>
+            <li>etcd == distributed key value store</li>
+            <li>registrator == service registry bridge</li>
+            <li>confd == config writer + reloader</li>
+            <li>nginx/haproxy == load balancer</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Stack 2</h3>
+          <ul>
+            <li>consul == distributed key value store</li>
+            <li>registrator == service registry bridge</li>
+            <li>consul-template == config writer + reloader</li>
+            <li>nginx/haproxy == load balancer</li>
+          </ul>
+        </section>
+
+        <section>
+          <img src="img/thinking-face.png"/>
+        </section>
+
+        <section>
+          <h3>Stack 3</h3>
+          <ul>
+            <li>interlock == service registry bridge + config writer + reloader</li>
+            <li>nginx/haproxy == load balancer</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Interlock</h3>
+          <ul>
+            <li><a href="https://github.com/ehazlett/interlock" target="_blank">GitHub</a></li>
+            <li><a href="https://github.com/ehazlett/interlock/issues/91" target="_blank">Externalize the extension configuration templates</a></li>
+            <li><a href="https://github.com/ehazlett/interlock/issues/89" target="_blank">multi-interlock config support</a></li>
+            <li>Not claiming this is <i>the</i> solution</li>
+          </ul>
+        </section>
+
+<!-- ********************************************************************** -->
+
+        <section id="use-cases">
+          <h1 style="color:DeepSkyBlue">Use Cases</h1>
         </section>
 
 <!-- ********************************************************************** -->
@@ -282,6 +563,7 @@ $ docker network create mynetwork
           <h1>Thanks!</h1>
           <p><a href="https://twitter.com/everett_toews" target="_blank">@everett_toews</a></p>
           <p><a href="http://rack.to/carina-tutorial">rack.to/carina-tutorial</a></p>
+          <p><a href="https://getcarina.com/">getcarina.com</a></p>
         </section>
 
 <!-- ********************************************************************** -->
