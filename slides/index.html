@@ -4,9 +4,9 @@
   <head>
     <meta charset="utf-8">
 
-    <title>How Do I Even Swarm?</title>
+    <title>Effective Docker Swarm</title>
 
-    <meta name="description" content="An ever evolving presentation on how to use Docker Swarm">
+    <meta name="description" content="An ever evolving presentation on how to use Docker Swarm effectively.">
     <meta name="author" content="Everett Toews">
 
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -46,7 +46,7 @@
               <img src="img/swarmnado.gif"/>
               <p style="font-size: 50%;">Image source: Docker Inc.</p>
             </div>
-            <h1>How Do I<br/>Even Swarm?</h1>
+            <h1>How Do I Even Swarm?</h1>
           </div>
           <p style="font-size: 25%;">Use the arrow keys to navigate</p>
         </section>
@@ -74,7 +74,7 @@
 
         <section>
           <span style="white-space: nowrap;">
-            <h3>Agenda</h3>
+            <h3>Table of Contents</h3>
             <ol>
               <li><a href="#/swarm">Swarm</a></li>
               <li><a href="#/carina">Carina</a></li>
@@ -139,15 +139,8 @@
           <img src="img/push-button-receive-bacon.jpg"/>
         </section>
 
-<!-- ********************************************************************** -->
-
-        <section id="getting-started">
-          <h1 style="color:DeepSkyBlue">Getting started</h1>
-          <h1 style="color:DeepSkyBlue">on Swarm</h1>
-        </section>
-
         <section>
-          <h3>Get a Swarm</h3>
+          <h3>Push Button, Receive Swarm</h3>
           <ul>
             <li><a href="https://getcarina.com/docs/getting-started/getting-started-on-carina/" target="_blank">Getting started with the Carina GUI</a></li>
             <li><a href="https://getcarina.com/docs/getting-started/getting-started-carina-cli/" target="_blank">Getting started with the Carina CLI</a></li>
@@ -180,6 +173,13 @@ DOCKER_VERSION=1.10.3</span>
 
 command line interface to launch and work with Docker Swarm clusters</span>
           </code></pre>
+        </section>
+
+<!-- ********************************************************************** -->
+
+        <section id="getting-started">
+          <h1 style="color:DeepSkyBlue">Getting started</h1>
+          <h1 style="color:DeepSkyBlue">on Swarm</h1>
         </section>
 
         <section>
@@ -241,7 +241,7 @@ mysql</span>
           <ul>
             <li>Cannot use volume mounts</li>
             <ul>
-              <li>Example <code>--volume /some/host/path:/some/container/path</code></li>
+              <li>Example <code>--volume /host/path:/container/path</code></li>
               <li>Except for <code>--volume /var/run/docker.sock:/var/run/docker.sock</code></li>
               <li>See <a href="#/data">Data section</a></li>
             </ul>
@@ -271,9 +271,9 @@ Nodes: 3
 <span class="fragment">$ docker ps --all</span>
 <span class="fragment">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
 90053babe266        swarm:1.1.3         "/swarm manage -H=tcp"   44 minutes ago      Up 44 minutes                           0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n1/swarm-manager
-b55984655563        cirros              "/sbin/init"             44 minutes ago                                              0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n3/swarm-data
-c4f69d0607da        carina/consul       "/bin/consul agent -b"   43 minutes ago      Up 43 minutes                           0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n3/carina-svcd
-301b6682c25c        cirros              "/sbin/init"             43 minutes ago                                              0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n3/carina-svcd-data
+b55984655563        cirros              "/sbin/init"             44 minutes ago                                              0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n1/swarm-data
+c4f69d0607da        carina/consul       "/bin/consul agent -b"   43 minutes ago      Up 43 minutes                           0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n1/carina-svcd
+301b6682c25c        cirros              "/sbin/init"             43 minutes ago                                              0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n1/carina-svcd-data
 ...</span>
           </code></pre>
         </section>
@@ -490,6 +490,32 @@ MySQL Connection Error: (2002) php_network_getaddresses: getaddrinfo failed: Nam
         </section>
 
         <section>
+          <h3>Certs and TLS</h3>
+
+          <pre><code class="bash" data-trim data-noescape>
+$ env | grep DOCKER
+<span class="fragment">DOCKER_HOST=tcp://104.130.0.154:2376
+DOCKER_TLS_VERIFY=1
+DOCKER_CERT_PATH=/Users/everett/.carina/clusters/everett4drg/mycluster
+DOCKER_VERSION=1.10.3</span>
+
+<span class="fragment">$ cat $DOCKER_CERT_PATH/README.md</span>
+<span class="fragment">Using Your Swarm Cluster
+========================
+
+This directory contains all of the files the Docker CLI will need to
+communicate with your Swarm Cluster. The included files are:
+
+* ca.pem - Certificate Authority, used by clients to validate servers
+* cert.pem - Client Certificate, used by clients to identify themselves to servers
+* key.pem - Client Private Key, used by clients to encrypt their requests
+* ca-key.pem - Certificate Authority Key, private file used to generate more client certificates.
+* docker.env - Shell environment config file</span>
+          </code></pre>
+          <span class="fragment"><img src="img/thumbs-up.png"/></span>
+        </section>
+
+        <section>
           <h3>Solutions</h3>
           <ul>
             <li><a href="https://getcarina.com/docs/tutorials/overlay-networks/" target="_blank">Use overlay networks in Carina</a></li>
@@ -587,8 +613,17 @@ MySQL Connection Error: (2002) php_network_getaddresses: getaddrinfo failed: Nam
           <h3>Teaching</h3>
           <img src="img/howtowhale.png"/>
           <p><a href="https://howtowhale.com/" target="_blank">How to Whale</a></p>
+          <aside class="notes">
+            <p>
+              <li>howtowhale.com oauths with your carina credentials</li>
+              <li>it uses that oauth to create a swarm cluster called howtowhale on ​*your* account</li>
+              <li>it then runs a jupyter server in a container on that cluster</li>
+              <li>jupyter notebooks run in that container</li>
+              <li>TryDocker is a notebook with a bash kernel, meaning you can run bash commands which are executed on the jupyter server</li>
+              <li>the shell session for TryDocker has the appropriate docker environment variables set so that your docker commands execute against your docker swarm cluster, think DOCKER_HOST and DOCKER_CERT_PATH</li>
+            </ul>
+          </aside>
         </section>
-
 
 <!-- ********************************************************************** -->
 
@@ -598,9 +633,9 @@ MySQL Connection Error: (2002) php_network_getaddresses: getaddrinfo failed: Nam
 
         <section id="thanks">
           <h1>Thanks!</h1>
+          <p><a href="http://rack.to/swarm">rack.to/swarm</a></p>
+          <p><a href="https://getcarina.com/" target="_blank">getcarina.com</a></p>
           <p><a href="https://twitter.com/everett_toews" target="_blank">@everett_toews</a></p>
-          <p><a href="http://rack.to/carina-tutorial">rack.to/carina-tutorial</a></p>
-          <p><a href="https://getcarina.com/">getcarina.com</a></p>
         </section>
 
 <!-- ********************************************************************** -->
