@@ -51,17 +51,10 @@
           <p style="font-size: 25%;">Use the arrow keys to navigate</p>
         </section>
 
-        <section id="instructors">
-          <center>
-            <table>
-              <tbody>
-                <tr>
-                  <td>Everett Toews</td>
-                  <td><a href="https://twitter.com/everett_toews" target="_blank">@everett_toews</a></td>
-                </tr>
-              </tbody>
-            </table>
-          </center>
+        <section>
+          <p>Everett Toews</p>
+          <img src="img/inception.jpg"/>
+          <p><a href="https://twitter.com/everett_toews" target="_blank">@everett_toews</a></p>
         </section>
 
         <section id="goals">
@@ -116,6 +109,7 @@
           <h3>Benefits</h3>
           <ul>
             <li>Docker API</li>
+            <li>Apply everything you've already learned</li>
             <li>Ecosystem tooling</li>
             <li>Scheduling containers</li>
               <ul>
@@ -123,7 +117,7 @@
                 <li>Constraints</li>
                 <li>Filters</li>
               </ul>
-            <li>Rescheduling containers when hosts fail (experimental)</li>
+            <li>Rescheduling containers when nodes fail (experimental)</li>
             <li>🐶🐱🐹 vs 🐮🐮🐮</li>
           </ul>
         </section>
@@ -237,11 +231,11 @@ mysql</span>
 
         <section>
           <h3>Constraints</h3>
-          <p>tl;dr You don't have access to the Docker Host</p>
+          <p>tl;dr You don't have access to the Docker Node</p>
           <ul>
             <li>Cannot use volume mounts</li>
             <ul>
-              <li>Example <code>--volume /host/path:/container/path</code></li>
+              <li>Example <code>--volume /node/path:/container/path</code></li>
               <li>Except for <code>--volume /var/run/docker.sock:/var/run/docker.sock</code></li>
               <li>See <a href="#/data">Data section</a></li>
             </ul>
@@ -285,7 +279,7 @@ c4f69d0607da        carina/consul       "/bin/consul agent -b"   43 minutes ago 
         </section>
 
         <section>
-          <img src="img/even.png"/>
+          <img src="img/effective.png"/>
         </section>
 
 <!-- ********************************************************************** -->
@@ -417,7 +411,7 @@ $ docker run --rm \
             <li><a href="https://getcarina.com/docs/tutorials/data-stores-mysql/" target="_blank">Use MySQL on Carina</a></li>
             <li><a href="https://getcarina.com/docs/tutorials/data-stores-mysql-prod/" target="_blank">Connect a Carina container to a Rackspace cloud database</a></li>
             <li>Distributed file system</li>
-            <li><a href="https://github.com/docker/swarm/issues/1529" target="_blank">The utility of creating a volume per node</a> (bug report)</li>
+            <li><a href="https://github.com/docker/swarm/issues/1529" target="_blank">The utility of creating a volume per node</a> (issue)</li>
           </ul>
         </section>
 
@@ -592,6 +586,15 @@ communicate with your Swarm Cluster. The included files are:
           </ul>
         </section>
 
+        <section>
+          <h3>Service Discovery</h3>
+          <ul>
+            <li>Crawl: Overlay networks and DNS</li>
+            <li>Walk: Interlock</li>
+            <li>Run: etcd/Consul</li>
+          </ul>
+        </section>
+
 <!-- ********************************************************************** -->
 
         <section id="use-cases">
@@ -625,10 +628,41 @@ communicate with your Swarm Cluster. The included files are:
           </aside>
         </section>
 
+        <section>
+          <h3>Websites</h3>
+          <img src="img/scoutapark.png"/>
+          <p><a href="https://getcarina.com/blog/ScoutaPark-Runs-On-Carina/" target="_blank">ScoutaPark Runs Production on Carina</a></p>
+        </section>
+
 <!-- ********************************************************************** -->
 
         <section id="wrap-up">
           <h1 style="color:DeepSkyBlue">Wrap up</h1>
+        </section>
+
+        <section>
+          <h3>Carina at the OpenStack Summit</h3>
+          <ul>
+            <li><a href=" http://www.cvent.com/d/pfq4wl/4W">Free event</a></li>
+            <li>April 25-27</li>
+            <li>Tuesday, April 26 is Carina day</li>
+            <li>Micheladas Cafe y Cantina across from ACC</li>
+            <li>Talks from Rackspace, Google, and customers</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Carina T-Shirt</h3>
+          <table>
+            <tr>
+              <td><img src="img/t-shirt-front.jpg"></td>
+              <td><img src="img/t-shirt-back.jpg"></td>
+            </tr>
+            <tr>
+              <td style="text-align:center">Front</td>
+              <td style="text-align:center">Back</td>
+            </tr>
+          </table>
         </section>
 
         <section id="thanks">
