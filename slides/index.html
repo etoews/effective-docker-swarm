@@ -6,7 +6,7 @@
 
     <title>Effective Docker Swarm</title>
 
-    <meta name="description" content="An ever evolving presentation on how to use Docker Swarm effectively.">
+    <meta name="description" content="An evolving presentation on how to use Docker Swarm effectively.">
     <meta name="author" content="Everett Toews">
 
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -58,14 +58,15 @@
 
         <section>
           <p>Everett Toews</p>
-          <img src="img/inception.jpg"/>
+          <video data-autoplay src="img/snow.mp4" width="720" height="auto"></video>
           <p><a href="https://twitter.com/everett_toews" target="_blank">@everett_toews</a></p>
         </section>
 
         <section id="goals">
           <h3>Goals</h3>
           <ul>
-            <li>Get started with Docker Swarm</li>
+            <li>Introduce Carina</li>
+            <li>Get started with Swarm</li>
             <li>Use Swarm effectively</li>
           </ul>
         </section>
@@ -77,7 +78,6 @@
               <li><a href="#/swarm">Swarm</a></li>
               <li><a href="#/carina">Carina</a></li>
               <li><a href="#/getting-started">Getting Started on Swarm</a></li>
-              <li><a href="#/carina-continued">Carina Continued</a></li>
               <li><a href="#/effective-swarm">Effective Swarm</a></li>
               <li><a href="#/images">Images</a></li>
               <li><a href="#/data">Data</a></li>
@@ -93,19 +93,25 @@
 <!-- ********************************************************************** -->
 
         <section id="swarm">
+          <h1 style="color:DeepSkyBlue">Docker</h1>
           <h1 style="color:DeepSkyBlue">Swarm</h1>
+        </section>
+
+        <section>
+          <h3>Swarm is clustering</h3>
+          <h3>for multiple Docker nodes</h3>
         </section>
 
         <section>
           <h3>Comparison</h3>
           <table>
             <tr>
-              <td><img src="img/docker-nodes.jpg" width="400" height="auto"></td>
-              <td><img src="img/docker-swarm.jpg" width="400" height="auto"></td>
+              <td><img src="img/docker-nodes.jpg" width="300" height="auto"></td>
+              <td><img src="img/docker-swarm.jpg" width="300" height="auto"></td>
             </tr>
             <tr>
               <td style="text-align:center">Nodes</td>
-              <td style="text-align:center">Swarm</td>
+              <td style="text-align:center">Swarm cluster</td>
             </tr>
           </table>
         </section>
@@ -114,17 +120,28 @@
           <h3>Benefits</h3>
           <ul>
             <li>Docker API</li>
-            <li>Apply everything you've already learned</li>
-            <li>Ecosystem tooling</li>
-            <li>Scheduling containers</li>
+            <span class="fragment"><li>Apply what you've learned</li></span>
+            <span class="fragment"><li>Ecosystem tooling</li></span>
+            <span class="fragment"><li>Scheduling containers</li></span>
               <ul>
-                <li>Strategies</li>
-                <li>Constraints</li>
-                <li>Filters</li>
+                <span class="fragment"><li>Strategies</li></span>
+                <span class="fragment"><li>Constraints</li></span>
+                <span class="fragment"><li>Filters</li></span>
               </ul>
-            <li>Rescheduling containers when nodes fail (experimental)</li>
-            <li>🐶🐱🐹 vs 🐮🐮🐮</li>
+            <span class="fragment"><li>Rescheduling containers</li></span>
+            <span class="fragment"><li>DNS</li></span>
+            <span class="fragment"><li>🐶🐱🐹 vs 🐮🐮🐮</li></span>
           </ul>
+        </section>
+
+        <section>
+          <h3>The basic unit of</h3>
+          <h3>compute is a cluster</h3>
+        </section>
+
+        <section>
+          <h3>Where do I</h3>
+          <h3>get a Swarm cluster?</h3>
         </section>
 
 <!-- ********************************************************************** -->
@@ -134,12 +151,28 @@
         </section>
 
         <section>
+          <h3>Carina creates</h3>
+          <h3>Docker Swarm clusters</h3>
+        </section>
+
+        <section>
           <h3>Push Button, Receive Swarm</h3>
           <img src="img/push-button-receive-bacon.jpg"/>
         </section>
 
         <section>
-          <h3>Push Button, Receive Swarm</h3>
+          <h3>Benefits</h3>
+          <ul>
+            <li>Bare-metal performance</li>
+            <span class="fragment"><ul><li>Up to 60% faster than VMs</li></ul></span>
+            <span class="fragment"><li>Intuitive &amp; easy to use</li></span>
+            <span class="fragment"><li>Up and running in minutes</li></span>
+            <span class="fragment"><li>(Beta)</li></span>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Up and running in minutes</h3>
           <ul>
             <li><a href="https://getcarina.com/docs/getting-started/getting-started-on-carina/" target="_blank">Getting started with the Carina GUI</a></li>
             <li><a href="https://getcarina.com/docs/getting-started/getting-started-carina-cli/" target="_blank">Getting started with the Carina CLI</a></li>
@@ -174,11 +207,63 @@ command line interface to launch and work with Docker Swarm clusters</span>
           </code></pre>
         </section>
 
+        <section id="carina-architecture">
+          <img src="img/docker-swarm-carina.jpg" width="800" height="auto"/>
+        </section>
+
+        <section>
+          <h3>Constraints</h3>
+          <p>tl;dr You don't have access to the Docker Node</p>
+          <ul>
+            <span class="fragment"><li>Cannot use volume mounts</li></span>
+            <ul>
+              <span class="fragment"><li>Example <code>--volume /node/path:/container/path</code></li></span>
+              <span class="fragment"><li>Except <code>--volume /var/run/docker.sock:/var/run/docker.sock</code></li></span>
+              <span class="fragment"><li>See <a href="#/data">Data section</a></li></span>
+            </ul>
+            <span class="fragment"><li>Cannot use <code>--privileged</code>, <code>--cap-add</code>, or <code>--cap-drop</code></li></span>
+            <span class="fragment"><li>AppArmor restrictions</li></span>
+            <span class="fragment"><li>Try not to <code>docker rm</code> the Swarm management containers</li></span>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Get info</h3>
+
+          <pre><code class="bash" data-trim data-noescape>
+$ docker info
+<span class="fragment">Containers: 13
+ Running: 7
+ Paused: 0
+ Stopped: 6
+Images: 11
+Server Version: swarm/1.1.3
+Role: primary
+Strategy: spread
+Filters: health, port, dependency, affinity, constraint
+Nodes: 3
+...</span>
+
+<span class="fragment">$ docker ps --all</span>
+<span class="fragment">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+90053babe266        swarm:1.1.3         "/swarm manage -H=tcp"   44 minutes ago      Up 44 minutes                           0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n1/swarm-manager
+b55984655563        cirros              "/sbin/init"             44 minutes ago                                              0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n1/swarm-data
+c4f69d0607da        carina/consul       "/bin/consul agent -b"   43 minutes ago      Up 43 minutes                           0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n1/carina-svcd
+301b6682c25c        cirros              "/sbin/init"             43 minutes ago                                              0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n1/carina-svcd-data
+...</span>
+          </code></pre>
+        </section>
+
 <!-- ********************************************************************** -->
 
         <section id="getting-started">
           <h1 style="color:DeepSkyBlue">Getting started</h1>
           <h1 style="color:DeepSkyBlue">on Swarm</h1>
+          <aside class="notes">
+            <ul>
+              <li>From this point forward it's all about Swarm</li>
+            </ul>
+          </aside>
         </section>
 
         <section>
@@ -225,60 +310,6 @@ mysql</span>
 
 <!-- ********************************************************************** -->
 
-        <section id="carina-continued">
-          <h1 style="color:DeepSkyBlue">Carina</h1>
-          <h1 style="color:DeepSkyBlue">Continued</h1>
-        </section>
-
-        <section id="carina-architecture">
-          <img src="img/docker-swarm-carina.jpg"/>
-        </section>
-
-        <section>
-          <h3>Constraints</h3>
-          <p>tl;dr You don't have access to the Docker Node</p>
-          <ul>
-            <li>Cannot use volume mounts</li>
-            <ul>
-              <li>Example <code>--volume /node/path:/container/path</code></li>
-              <li>Except for <code>--volume /var/run/docker.sock:/var/run/docker.sock</code></li>
-              <li>See <a href="#/data">Data section</a></li>
-            </ul>
-            <li>Cannot use <code>--privileged</code>, <code>--cap-add</code>, or <code>--cap-drop</code></li>
-            <li>AppArmor restrictions</li>
-            <li>Try not to <code>docker rm</code> the Carina containers</li>
-          </ul>
-        </section>
-
-        <section>
-          <h3>Get info</h3>
-
-          <pre><code class="bash" data-trim data-noescape>
-$ docker info
-<span class="fragment">Containers: 13
- Running: 7
- Paused: 0
- Stopped: 6
-Images: 11
-Server Version: swarm/1.1.3
-Role: primary
-Strategy: spread
-Filters: health, port, dependency, affinity, constraint
-Nodes: 3
-...</span>
-
-<span class="fragment">$ docker ps --all</span>
-<span class="fragment">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
-90053babe266        swarm:1.1.3         "/swarm manage -H=tcp"   44 minutes ago      Up 44 minutes                           0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n1/swarm-manager
-b55984655563        cirros              "/sbin/init"             44 minutes ago                                              0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n1/swarm-data
-c4f69d0607da        carina/consul       "/bin/consul agent -b"   43 minutes ago      Up 43 minutes                           0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n1/carina-svcd
-301b6682c25c        cirros              "/sbin/init"             43 minutes ago                                              0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n1/carina-svcd-data
-...</span>
-          </code></pre>
-        </section>
-
-<!-- ********************************************************************** -->
-
         <section id="effective-swarm">
           <h1 style="color:DeepSkyBlue">Effective Swarm</h1>
         </section>
@@ -311,9 +342,10 @@ $ docker pull nginx:1.9
 <span class="fragment">$ docker run --detach --publish 80:80 nginx:1.9</span>
 <span class="fragment">bf93e25fade39b5df66012fc1d06976ab6c05e67a6662a1c5454e820698fff58</span>
 
-<span class="fragment">$ docker rm -fv $(docker ps -q -n=3)</span>
+<span class="fragment">$ docker run --detach --publish 80:80 nginx:1.9</span>
+<span class="fragment">docker: Error response from daemon: unable to find a node with port 80 available.</span>
           </code></pre>
-          <span class="fragment"><img src="img/thumbs-up.png"/></span>
+          <span class="fragment"><img class="emoji" src="img/thumbs-up.png"/></span>
         </section>
 
         <section>
@@ -348,12 +380,12 @@ b7ef97d0e7b0        my-nginx            "nginx -g 'daemon off"   21 seconds ago 
 <span class="fragment">docker: Error response from daemon: unable to find a node that satisfies image==my-nginx.
 See 'docker run --help'.</span>
           </code></pre>
-          <span class="fragment"><img src="img/thinking-face.png"/></span>
+          <span class="fragment"><img class="emoji" src="img/thinking-face.png"/></span>
         </section>
 
         <section>
           <h3>Solution</h3>
-          <p><a href="https://getcarina.com/docs/troubleshooting/run-container-using-custom-image/" target="_blank">Error running a container using a custom image</a></p>
+          <p><a href="https://getcarina.com/docs/troubleshooting/run-container-using-custom-image/" target="_blank">Running a container using a custom image</a></p>
         </section>
 
 <!-- ********************************************************************** -->
@@ -380,7 +412,7 @@ local               0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n3/mydata</span>
   debian:jessie \
   /bin/bash -c "echo 'hello' > /test/world.txt"</span>
           </code></pre>
-          <span class="fragment"><img src="img/thumbs-up.png"/></span>
+          <span class="fragment"><img class="emoji" src="img/thumbs-up.png"/></span>
         </section>
 
         <section>
@@ -405,7 +437,7 @@ $ docker run --rm \
   cat /test/world.txt</span>
 <span class="fragment">cat: /test/world.txt: No such file or directory</span>
           </code></pre>
-          <span class="fragment"><img src="img/thinking-face.png"/></span>
+          <span class="fragment"><img class="emoji" src="img/thinking-face.png"/></span>
         </section>
 
         <section>
@@ -442,8 +474,8 @@ $ docker run --detach --name redis --publish 6379:6379 redis:3.0
 <span class="fragment">$ redis-cli -h 104.130.0.207 get redis:on:carina</span>
 <span class="fragment">"true"</span>
           </code></pre>
-          <span class="fragment"><img src="img/thumbs-up.png"/></span>
-          <span class="fragment"><img src="img/thinking-face.png"/></span>
+          <span class="fragment"><img class="emoji" src="img/thumbs-up.png"/></span>
+          <span class="fragment"><img class="emoji" style="left: 200px;" src="img/thinking-face.png"/></span>
         </section>
 
         <section>
@@ -471,7 +503,7 @@ Warning: mysqli::mysqli(): php_network_getaddresses: getaddrinfo failed: Name or
 Warning: mysqli::mysqli(): (HY000/2002): php_network_getaddresses: getaddrinfo failed: Name or service not known in - on line 10
 MySQL Connection Error: (2002) php_network_getaddresses: getaddrinfo failed: Name or service not known</span>
           </code></pre>
-          <span class="fragment"><img src="img/thinking-face.png"/></span>
+          <span class="fragment"><img class="emoji" src="img/thinking-face.png"/></span>
         </section>
 
         <section>
@@ -511,7 +543,7 @@ communicate with your Swarm Cluster. The included files are:
 * ca-key.pem - Certificate Authority Key, private file used to generate more client certificates.
 * docker.env - Shell environment config file</span>
           </code></pre>
-          <span class="fragment"><img src="img/thumbs-up.png"/></span>
+          <span class="fragment"><img class="emoji" src="img/thumbs-up.png"/></span>
         </section>
 
         <section>
@@ -532,7 +564,36 @@ communicate with your Swarm Cluster. The included files are:
         </section>
 
         <section>
-          <h3>Stack 1</h3>
+          <h3>Typical Scenario</h3>
+          <ol>
+            <li>Service registrtation</li>
+            <li>Service discovery</li>
+            <li>Load balancing</li>
+          </ol>
+        </section>
+
+        <section>
+          <h3>Crawl: DNS</h3>
+          <ul>
+            <li><a href="http://blog.phymata.com/2016/04/15/dns-round-robin-in-docker-1-11/" target="_blank">DNS Round Robin</a></li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Walk: Interlock</h3>
+          <ul>
+            <li><a href="https://github.com/ehazlett/interlock" target="_blank">GitHub</a></li>
+            <li><a href="https://github.com/ehazlett/interlock/issues/91" target="_blank">Externalized templates</a></li>
+            <li><a href="https://github.com/ehazlett/interlock/issues/89" target="_blank">Multi-interlock config</a></li>
+          </ul>
+        </section>
+
+        <section>
+          <img src="img/interlock.jpg" width="800" height="auto"/>
+        </section>
+
+        <section>
+          <h3>Run: etcd</h3>
           <ul>
             <li>etcd == distributed key value store</li>
             <li>registrator == service registry bridge</li>
@@ -542,7 +603,7 @@ communicate with your Swarm Cluster. The included files are:
         </section>
 
         <section>
-          <h3>Stack 2</h3>
+          <h3>Run: Consul</h3>
           <ul>
             <li>consul == distributed key value store</li>
             <li>registrator == service registry bridge</li>
@@ -551,59 +612,17 @@ communicate with your Swarm Cluster. The included files are:
           </ul>
         </section>
 
-        <section>
-          <div>
-            <h3>x node cluster</h3>
-            <ul>
-              <li>consul/etcd == x containers</li>
-              <li>registrator == x containers</li>
-              <li>consul-template/confd == sidecar process per load balancer</li>
-              <li>nginx/haproxy == container per service</li>
-            </ul>
-          </div>
-          <img src="img/thinking-face.png"/>
-        </section>
-
-        <section>
-          <h3>Stack 3</h3>
-          <ul>
-            <li>interlock == service registry bridge + config writer + reloader</li>
-            <li>nginx/haproxy == load balancer</li>
-          </ul>
-          <h3>x node cluster</h3>
-          <ul>
-            <li>interlock == container per service</li>
-            <li>nginx/haproxy == container per service</li>
-          </ul>
-        </section>
-
-        <section>
-          <img src="img/interlock.jpg"/>
-        </section>
-
-        <section>
-          <h3>Interlock</h3>
-          <ul>
-            <li><a href="https://github.com/ehazlett/interlock" target="_blank">GitHub</a></li>
-            <li><a href="https://github.com/ehazlett/interlock/issues/91" target="_blank">Externalize the extension configuration templates</a></li>
-            <li><a href="https://github.com/ehazlett/interlock/issues/89" target="_blank">multi-interlock config support</a></li>
-            <li>Not claiming this is <i>the</i> solution</li>
-          </ul>
-        </section>
-
-        <section>
-          <h3>Service Discovery</h3>
-          <ul>
-            <li>Crawl: Overlay networks and DNS</li>
-            <li>Walk: Interlock</li>
-            <li>Run: etcd/Consul</li>
-          </ul>
-        </section>
-
 <!-- ********************************************************************** -->
 
         <section id="use-cases">
           <h1 style="color:DeepSkyBlue">Use Cases</h1>
+        </section>
+
+        <section>
+          <h3>Develop and deploy</h3>
+          <img src="img/pythonwebapp.jpg"/>
+          <p><a href="https://getcarina.com/docs/tutorials/develop-a-python-web-application/" target="_blank">Develop a Python web application</a></p>
+          <p>Uses Effective Docker Swarm</p>
         </section>
 
         <section>
@@ -618,11 +637,17 @@ communicate with your Swarm Cluster. The included files are:
         </section>
 
         <section>
+          <h3>Games</h3>
+          <img src="img/games.png"/>
+          <p><a href="https://getcarina.com/blog/build-real-time-game-carina/" target="_blank">Build a real-time game on Carina</a></p>
+        </section>
+
+        <section>
           <h3>Teaching</h3>
           <img src="img/howtowhale.png"/>
           <p><a href="https://howtowhale.com/" target="_blank">How to Whale</a></p>
           <aside class="notes">
-            <p>
+            <ul>
               <li>howtowhale.com oauths with your carina credentials</li>
               <li>it uses that oauth to create a swarm cluster called howtowhale on ​*your* account</li>
               <li>it then runs a jupyter server in a container on that cluster</li>
@@ -643,31 +668,6 @@ communicate with your Swarm Cluster. The included files are:
 
         <section id="wrap-up">
           <h1 style="color:DeepSkyBlue">Wrap up</h1>
-        </section>
-
-        <section>
-          <h3>Carina at the OpenStack Summit</h3>
-          <ul>
-            <li><a href=" http://www.cvent.com/d/pfq4wl/4W">Free event</a></li>
-            <li>April 25-27</li>
-            <li>Tuesday, April 26 is Carina day</li>
-            <li>Micheladas Cafe y Cantina across from ACC</li>
-            <li>Talks from Rackspace, Google, and customers</li>
-          </ul>
-        </section>
-
-        <section>
-          <h3>Carina T-Shirt</h3>
-          <table>
-            <tr>
-              <td><img src="img/t-shirt-front.jpg"></td>
-              <td><img src="img/t-shirt-back.jpg"></td>
-            </tr>
-            <tr>
-              <td style="text-align:center">Front</td>
-              <td style="text-align:center">Back</td>
-            </tr>
-          </table>
         </section>
 
         <section id="thanks">
