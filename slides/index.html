@@ -218,12 +218,15 @@ command line interface to launch and work with Docker Swarm clusters</span>
             <span class="fragment"><li>Cannot use volume mounts</li></span>
             <ul>
               <span class="fragment"><li>Example <code>--volume /node/path:/container/path</code></li></span>
-              <span class="fragment"><li>Except <code>--volume /var/run/docker.sock:/var/run/docker.sock</code></li></span>
+              <span class="fragment"><li>Exception <code>--volume /var/run/docker.sock:/var/run/docker.sock</code></li></span>
               <span class="fragment"><li>See <a href="#/data">Data section</a></li></span>
             </ul>
             <span class="fragment"><li>Cannot use <code>--privileged</code>, <code>--cap-add</code>, or <code>--cap-drop</code></li></span>
             <span class="fragment"><li>AppArmor restrictions</li></span>
             <span class="fragment"><li>Try not to <code>docker rm</code> the Swarm management containers</li></span>
+            <ul>
+              <span class="fragment"><li>But if you do <code>carina rebuild mycluster</code></li></span>
+            </ul>
           </ul>
         </section>
 
@@ -311,7 +314,8 @@ mysql</span>
 <!-- ********************************************************************** -->
 
         <section id="effective-swarm">
-          <h1 style="color:DeepSkyBlue">Effective Swarm</h1>
+          <h1 style="color:DeepSkyBlue">Effective</h1>
+          <h1 style="color:DeepSkyBlue">Docker Swarm</h1>
         </section>
 
         <section>
@@ -385,7 +389,9 @@ See 'docker run --help'.</span>
 
         <section>
           <h3>Solution</h3>
-          <p><a href="https://getcarina.com/docs/troubleshooting/run-container-using-custom-image/" target="_blank">Running a container using a custom image</a></p>
+          <ul>
+            <li><a href="https://getcarina.com/docs/troubleshooting/run-container-using-custom-image/" target="_blank">Running a container using a custom image</a></li>
+          </ul>
         </section>
 
 <!-- ********************************************************************** -->
@@ -443,12 +449,20 @@ $ docker run --rm \
         <section>
           <h3>Solutions</h3>
           <ul>
+            <li>Distributed file system</li>
             <li><a href="https://getcarina.com/docs/tutorials/data-volume-containers/" target="_blank">Use data volume containers</a></li>
             <li><a href="https://getcarina.com/docs/tutorials/backup-restore-data/" target="_blank">Back up and restore container data</a></li>
-            <li><a href="https://getcarina.com/docs/tutorials/data-stores-mysql/" target="_blank">Use MySQL on Carina</a></li>
-            <li><a href="https://getcarina.com/docs/tutorials/data-stores-mysql-prod/" target="_blank">Connect a Carina container to a Rackspace cloud database</a></li>
-            <li>Distributed file system</li>
             <li><a href="https://github.com/docker/swarm/issues/1529" target="_blank">The utility of creating a volume per node</a> (issue)</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Solutions</h3>
+          <ul>
+            <li><a href="https://getcarina.com/docs/tutorials/data-stores-mysql/" target="_blank">Use MySQL on Carina</a></li>
+            <li><a href="https://getcarina.com/docs/tutorials/data-stores-mysql-prod/" target="_blank">Connect to a Rackspace MySQL DB</a></li>
+            <li><a href="https://getcarina.com/docs/tutorials/data-stores-mongodb/" target="_blank">Use MongoDB on Carina</a></li>
+            <li><a href="https://getcarina.com/docs/tutorials/data-stores-mongodb-prod/" target="_blank">Connect to an ObjectRocket MongoDB</a></li>
           </ul>
         </section>
 
@@ -510,7 +524,6 @@ MySQL Connection Error: (2002) php_network_getaddresses: getaddrinfo failed: Nam
           <h3>Solutions</h3>
           <ul>
             <li><a href="https://getcarina.com/docs/tutorials/overlay-networks/" target="_blank">Use overlay networks in Carina</a></li>
-            <li><a href="https://getcarina.com/docs/tutorials/servicenet/" target="_blank">Communicate between containers over the ServiceNet internal network</a> (informational)</li>
           </ul>
         </section>
 
@@ -573,14 +586,14 @@ communicate with your Swarm Cluster. The included files are:
         </section>
 
         <section>
-          <h3>Crawl: DNS</h3>
+          <h3>DNS</h3>
           <ul>
             <li><a href="http://blog.phymata.com/2016/04/15/dns-round-robin-in-docker-1-11/" target="_blank">DNS Round Robin</a></li>
           </ul>
         </section>
 
         <section>
-          <h3>Walk: Interlock</h3>
+          <h3>Interlock</h3>
           <ul>
             <li><a href="https://github.com/ehazlett/interlock" target="_blank">GitHub</a></li>
             <li><a href="https://github.com/ehazlett/interlock/issues/91" target="_blank">Externalized templates</a></li>
@@ -593,7 +606,7 @@ communicate with your Swarm Cluster. The included files are:
         </section>
 
         <section>
-          <h3>Run: etcd</h3>
+          <h3>etcd</h3>
           <ul>
             <li>etcd == distributed key value store</li>
             <li>registrator == service registry bridge</li>
@@ -603,7 +616,7 @@ communicate with your Swarm Cluster. The included files are:
         </section>
 
         <section>
-          <h3>Run: Consul</h3>
+          <h3>Consul</h3>
           <ul>
             <li>consul == distributed key value store</li>
             <li>registrator == service registry bridge</li>
@@ -696,7 +709,10 @@ communicate with your Swarm Cluster. The included files are:
         history: true,
         center: true,
 
-        transition: 'slide', // none/fade/slide/convex/concave/zoom
+        minScale: 1,
+        maxScale: 1,
+
+        transition: 'none', // none/fade/slide/convex/concave/zoom
 
         // Optional reveal.js plugins
         dependencies: [
