@@ -205,6 +205,11 @@ DOCKER_VERSION=1.10.3</span>
 
 command line interface to launch and work with Docker Swarm clusters</span>
           </code></pre>
+          <aside class="notes">
+            <ul>
+              <li>dvm</li>
+            </ul>
+          </aside>
         </section>
 
         <section id="carina-architecture">
@@ -303,11 +308,10 @@ $ docker ps -n=2
 f39797148323        wordpress:4.4       "/entrypoint.sh apach"   41 seconds ago      Up 39 seconds       172.99.79.254:80->80/tcp   0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n3/wordpress
 ec8e539ce755        mysql:5.6           "docker-entrypoint.sh"   2 minutes ago       Up 2 minutes        3306/tcp                   0a8e8ff6-b7d1-4d7c-889b-d944e9b4d93a-n2/mysql</span>
 
-<span class="fragment">$ open http://$(docker port wordpress 80)</span>
+<span class="fragment">$ docker port wordpress 80</span>
+<span class="fragment">104.130.0.207:80</span>
 
-<span class="fragment">$ docker rm --force --volumes wordpress mysql</span>
-<span class="fragment">wordpress
-mysql</span>
+<span class="fragment">$ open http://$(docker port wordpress 80)</span>
           </code></pre>
         </section>
 
@@ -367,6 +371,7 @@ Step 1 : FROM debian:jessie
 jessie: Pulling from library/debian
 ...</span>
           </code></pre>
+          <span class="fragment"><img class="emoji" src="img/thumbs-up.png"/></span>
         </section>
 
         <section>
