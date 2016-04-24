@@ -1,2 +1,4 @@
 .reveal section img { background:none; border:none; box-shadow:none; }
 .reveal section img.emoji { position: absolute; left: 0; right: 0; margin-left: auto; margin-right: auto; }
+.slides .footer-left { position:absolute; bottom: 2%; left: 5%; }
+.slides .footer-right { position:absolute; bottom: 2%; right: 5%; }
